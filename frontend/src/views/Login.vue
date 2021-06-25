@@ -71,6 +71,7 @@
                       />
                     </div>
                     <div class="text-center mt-6">
+                      <router-link to="/home">
                       <button
                         class="
                           bg-green-500
@@ -95,6 +96,7 @@
                       >
                         LOGIN
                       </button>
+                      </router-link>
                     </div>
                   </form>
                    <div class="text-right">
