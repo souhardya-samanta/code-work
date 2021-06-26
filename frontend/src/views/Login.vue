@@ -26,10 +26,14 @@
                     </h6>
                   </div>
                 </div>
+                <div v-if="error">
+                  Unable to login
+                </div>
                 <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
                   <form>
                     <div class="w-full mb-2">
                       <input
+                        v-model="email"
                         type="email"
                         class="
                           border-0
@@ -51,6 +55,7 @@
                     </div>
                     <div class="w-full mb-2">
                       <input
+                        v-model="password"
                         type="password"
                         class="
                           border-0
@@ -71,7 +76,6 @@
                       />
                     </div>
                     <div class="text-center mt-6">
-                      <router-link to="/home">
                       <button
                         class="
                           bg-green-500
@@ -93,15 +97,17 @@
                         "
                         type="button"
                         style="transition: all 0.15s ease 0s"
+                        @click="login"
                       >
                         LOGIN
                       </button>
-                      </router-link>
                     </div>
                   </form>
-                   <div class="text-right">
-                    <router-link to="/"><small>New here? Create an account!</small></router-link>
-                </div>
+                  <div class="text-right">
+                    <router-link to="/"
+                      ><small>New here? Create an account!</small></router-link
+                    >
+                  </div>
                 </div>
               </div>
             </div>
@@ -111,3 +117,33 @@
     </main>
   </div>
 </template>
+
+<script>
+export default {
+  data () {
+    return {
+      email: '',
+      password: '',
+      error: false
+    }
+  },
+  methods: {
+    login () {
+      console.log({ e: this.email, pass: this.password })
+      this.$store
+        .dispatch('LOGIN', {
+          email: this.email,
+          password: this.password
+        })
+        .then((res) => {
+          console.log('Another res', res.user)
+          this.$router.push('/home')
+        })
+        .catch((error) => {
+          console.log(error);
+          (this.error = true)
+        })
+    }
+  }
+}
+</script>

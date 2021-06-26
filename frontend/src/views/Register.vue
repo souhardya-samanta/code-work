@@ -96,6 +96,7 @@
                     </div>
                     <div class="w-full mb-2">
                       <input
+                      v-model="password"
                         type="password"
                         class="
                           border-0
@@ -117,6 +118,7 @@
                     </div>
                     <div class="text-center mt-6">
                       <button
+                      @click="register"
                         class="
                           bg-green-500
                           text-white
@@ -141,6 +143,8 @@
                         SIGNUP
                       </button>
                     </div>
+                    <div v-if="error">Something went wrong</div>
+                    <div v-if="success">Account created succsessfully</div>
                   </form>
                    <div class="text-right">
                     <router-link to="/login"><small>Already have an account? Login instead</small></router-link>
@@ -154,3 +158,42 @@
     </main>
   </div>
 </template>
+
+<script>
+export default {
+  data () {
+    return {
+      name: '',
+      age: '',
+      email: '',
+      password: '',
+      error: false,
+      success: false
+    }
+  },
+  methods: {
+    register () {
+      console.log({ e: this.email, pass: this.password })
+      this.$store
+        .dispatch('REGISTER', {
+          name: this.name,
+          age: Number(this.age),
+          email: this.email,
+          password: this.password
+        })
+        .then((res) => {
+          this.success = true
+        })
+        .catch((error) => {
+          console.log(error);
+          (this.error = true)
+        }).finally(() => {
+          this.name = ''
+          this.age = ''
+          this.email = ''
+          this.password = ''
+        })
+    }
+  }
+}
+</script>
