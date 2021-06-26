@@ -2,9 +2,11 @@ const express = require('express');
 require('./db/mongoose');
 require('dotenv').config();
 const UserRouter = require("./routers/user");
+var cors = require('cors')
+
 
 const app = express()
-
+app.use(cors())
 const port = process.env.PORT
 const ip = process.env.IP_ADDR || '127.0.0.1'
 
