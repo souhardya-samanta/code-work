@@ -1,9 +1,12 @@
 const express = require("express");
 const router = express.Router();
+require('dotenv').config();
+const speakeasy = require('speakeasy');
+const qrcode = require('qrcode');
 const User = require("../models/user");
 const auth = require("../middleware/auth");
-var API_KEY = '262290992c387160d7887fc7dce2431d-1f1bd6a9-552f1b7d';
-var DOMAIN = 'sandbox24cdee73126945509a3f98e2692902ef.mailgun.org';
+var API_KEY = process.env.API_KEY;
+var DOMAIN = process.env.DOMAIN;
 var mailgun = require('mailgun-js')
     ({ apiKey: API_KEY, domain: DOMAIN });
 
@@ -45,6 +48,22 @@ router.post("/users/login", async (req, res) => {
         res.send({ user, token })
     } catch (error) {
         res.status(404).send()
+    }
+})
+
+router.post("/users/:id/generate",async(req,res)=>{
+    const _id = req.params.id;
+    var secret = speakeasy.generateSecret();
+    try {
+        const user = await User.findByIdAndUpdate(_id,{tempSecret:secret.base32});
+        if (!user) {
+            return res.status(404).send();
+        }
+        qrcode.toDataURL(secret.otpauth_url,function(err,data){
+            res.status(201).send({user,data})
+        })
+    } catch (error) {
+        res.status(400).send()
     }
 })
 

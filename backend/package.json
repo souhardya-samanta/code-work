@@ -18,6 +18,8 @@
     "mailgun-js": "^0.22.0",
     "mongodb": "^3.6.9",
     "mongoose": "^5.12.14",
+    "qrcode": "^1.4.4",
+    "speakeasy": "^2.0.0",
     "validator": "^13.6.0"
   }
 }

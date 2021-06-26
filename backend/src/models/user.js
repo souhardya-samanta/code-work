@@ -52,6 +52,10 @@ const UserSchema = new mongoose.Schema({
     auth:{
         type: String,
         default: null
+    },
+    tempSecret:{
+        type: String,
+        default: "tempSecret"
     }
 });
 
