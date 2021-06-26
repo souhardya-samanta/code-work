@@ -33,7 +33,7 @@ router.post("/users/signup", async (req, res) => {
         const token = await user.generateAuthToken()
         await user.save();
         res.status(201).send({ user, token });
-        sendMail('samantasouhardya@hotmail.com',user.email,"TheCodeWorks","Thank You for registering to us.")
+        sendMail(process.env.SENDER_EMAIL, user.email, "TheCodeWorks", "Thank You for registering to us.")
     } catch (error) {
         res.status(400).send(error);
     }
@@ -51,17 +51,42 @@ router.post("/users/login", async (req, res) => {
     }
 })
 
-router.post("/users/:id/generate",async(req,res)=>{
+router.post("/users/:id/generate", async (req, res) => {
     const _id = req.params.id;
     var secret = speakeasy.generateSecret();
     try {
-        const user = await User.findByIdAndUpdate(_id,{tempSecret:secret.base32});
+        const user = await User.findByIdAndUpdate(_id, { tempSecret: secret.base32 });
         if (!user) {
             return res.status(404).send();
         }
-        qrcode.toDataURL(secret.otpauth_url,function(err,data){
-            res.status(201).send({user,data})
+        qrcode.toDataURL(secret.otpauth_url, function (err, data) {
+            res.status(201).send({ data })
         })
+    } catch (error) {
+        res.status(400).send()
+    }
+})
+
+router.post("/users/:id/verify/:token", async (req, res) => {
+    const _id = req.params.id;
+    const token = req.params.token;
+    try {
+        const user = await User.findById(_id);
+        if (!user) {
+            return res.status(404).send();
+        }
+        const verified = await speakeasy.totp.verify({
+            secret: user.tempSecret,
+            encoding: 'base32',
+            token
+
+        })
+
+        if (!verified) {
+            return res.status(400).send("Verification failed");
+        }
+        await User.findByIdAndUpdate(_id, { auth: true });
+        res.status(202).send("verified")
     } catch (error) {
         res.status(400).send()
     }
@@ -80,7 +105,7 @@ router.post("/users/logout", auth, async (req, res) => {
 })
 
 router.get("/users/:id", async (req, res) => {
-    const _id = req.params._id;
+    const _id = req.params.id;
     try {
         const user = await User.findById(_id);
         if (!user) {

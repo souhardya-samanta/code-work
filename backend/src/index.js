@@ -5,7 +5,7 @@ const UserRouter = require("./routers/user");
 
 const app = express()
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT
 const ip = process.env.IP_ADDR || '127.0.0.1'
 
 app.use(express.json())

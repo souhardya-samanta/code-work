@@ -50,8 +50,8 @@ const UserSchema = new mongoose.Schema({
         },
     ],
     auth:{
-        type: String,
-        default: null
+        type: Boolean,
+        default: false
     },
     tempSecret:{
         type: String,
