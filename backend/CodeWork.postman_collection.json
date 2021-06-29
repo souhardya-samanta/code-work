@@ -39,9 +39,10 @@
 				"method": "POST",
 				"header": [
 					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGQ0Y2ZkNjY3YzZkMDM2NDc2ZDAxNzciLCJpYXQiOjE2MjQ1NTk1NzR9.7FckByl3_UUBXtmo36Pe2rURS_hTH_D8l6fpUXHABVY",
-						"type": "text"
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
 					}
 				],
 				"body": {
